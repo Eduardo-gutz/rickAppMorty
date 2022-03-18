@@ -1,0 +1,27 @@
+.menu {
+    display: flex;
+    flex-direction: column;
+    top: 4.5rem;
+    right: .5rem;
+
+    width: 95%;
+    max-width: 25rem;
+    height: 22rem;
+    align-items: flex-start;
+    padding: 1rem;
+    background-color: #477385CC;
+    backdrop-filter: blur(8px);
+    z-index: 8;
+
+    transform: translate(110%);
+    transition: transform ease .2s;
+}
+.active {
+    transform: translate(0%);
+}
+.divider {
+    height: 1px;
+    width: 90%;
+    background-color: #2F9331;
+    margin: .2rem auto;
+}

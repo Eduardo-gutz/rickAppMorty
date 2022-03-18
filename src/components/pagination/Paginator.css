@@ -1,0 +1,8 @@
+.pagination > ul > li > button {
+    border: 1px solid #477385;
+    color: #477378;
+    background-color: #4773854C;
+}
+.pagination > ul > li > div {
+    color: #477378;
+}
