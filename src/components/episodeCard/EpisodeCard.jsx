@@ -1,11 +1,13 @@
 import { CardContent, Box, Typography, CardMedia, Grid, Button } from '@mui/material'
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getCharacters } from '../../services/characters';
 import CardHover from '../customCard/Card';
 import DataText from '../DataText/DataText'
 
 const EpisodeCard = ({ episode }) => {
-  const [characters, setCharacters] = useState([])
+  const [characters, setCharacters] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const ids = episode.characters.slice(2, 8).map((character) => character.split('/').pop());
@@ -46,7 +48,7 @@ const EpisodeCard = ({ episode }) => {
               <DataText dataLabel='Episode:' data={ episode.episode } />
               <DataText dataLabel='Air date:' data={ episode.air_date } />
             </CardContent>
-            <Button variant="contained" size='small' color='secondary' sx={{width: '80%'}}>
+            <Button variant="contained" size='small' color='secondary' sx={{width: '80%'}} onClick={() => navigate(`/episode?id=${window.btoa(episode.id)}`)}>
               More
             </Button>
           </Box>

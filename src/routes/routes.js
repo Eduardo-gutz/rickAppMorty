@@ -1,6 +1,7 @@
 import Landing from '../modules/Landing';
 import SearchResult from '../modules/SearchResult';
 import CharacterDetails from '../modules/CharacterDetails/CharacterDetails';
+import EpisodeDetails from '../modules/EpisodeDetails/EpisodeDetails';
 
 export const routes = [
   {
@@ -17,5 +18,10 @@ export const routes = [
     key: 'details',
     route: '/details',
     component: <CharacterDetails />
+  },
+  {
+    key: 'episode',
+    route: '/episode',
+    component: <EpisodeDetails />
   }
 ]
