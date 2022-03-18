@@ -5,7 +5,7 @@ import {
   CardContent,
 } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { getCharacters } from "../../services/characters";
 import DataText from "../../components/DataText/DataText";
 import CharacterImg from "./components/CharacterImg";
@@ -19,6 +19,7 @@ const CharacterDetails = () => {
   const [characterDetails, setCharacterDetails] = useState();
   const [episodes, setEpisodes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
 
   const episodesPage = useMemo(() => {
     const firstElement = (currentPage - 1) * 2;
@@ -46,6 +47,8 @@ const CharacterDetails = () => {
         setEpisodes([episodes]);
       }
     };
+
+    console.log(characterDetails);
 
     getEpisodeByCharacters();
   }, [characterDetails]);
@@ -83,18 +86,21 @@ const CharacterDetails = () => {
               label={'Origin:'}
               data={characterDetails?.origin.name}
               buttonText='View Location'
-              onClick={() => console.log(characterDetails?.origin.url)}
+              onClick={() => navigate(`/location?id=${characterDetails?.origin.url.split('/').pop()}`)}
             />
             <DataTextLink
               label={'Location:'}
               data={characterDetails?.location.name}
               buttonText='View Location'
-              onClick={() => console.log(characterDetails?.location.url)}
+              onClick={() => navigate(`/location?id=${characterDetails?.location.url.split('/').pop()}`)}
             />
           </CardContent>
         </Card>
       </Grid>
       <Grid item lg={12} xs={12} marginTop={3}>
+        <Typography variant='h4' color='white' noWrap>
+          Character episodes
+        </Typography>
         <Grid container gap={3} direction='row' justifyContent='center' marginTop={2}>
           {
               episodesPage.slice(0, 4).map((episode) =>

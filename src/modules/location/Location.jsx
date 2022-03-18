@@ -2,13 +2,13 @@ import { useState,useEffect, useMemo } from 'react';
 import { Grid, Card, CardContent, Typography } from '@mui/material';
 import DataText from '../../components/DataText/DataText'
 import { useSearchParams } from 'react-router-dom';
-import { getEpisodesById } from '../../services/episodes';
+import { getLocation } from '../../services/location';
 import { getCharacters } from '../../services/characters';
 import CharacterCard from '../../components/characterCard/CharacterCard';
 import Paginator from '../../components/pagination/Paginator';
 
-const EpisodeDetails = () => {
-  const [episode, setEpisode] = useState();
+const LocationDetails = () => {
+  const [location, setLocation] = useState();
   const [searchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(1);
   const [characters, setCharacters] = useState([]);
@@ -20,49 +20,49 @@ const EpisodeDetails = () => {
     }, [currentPage, characters]);
 
   useEffect(() => {
-    const getEpisode = async () => {
-      const id = window.atob(searchParams.get('id'))
-      const episode = await getEpisodesById(id);
-      setEpisode(episode)
+    const getLocationById = async () => {
+      const id = searchParams.get('id')
+      const location = await getLocation(id);
+      setLocation(location)
     }
 
-    getEpisode();
+    getLocationById();
   }, [searchParams]);
   
   useEffect(() => {
     const getCharactersByEpisode = async () => {
-      const ids = episode.characters.map((character) => character.split('/').pop())
+      const ids = location.residents.map((character) => character.split('/').pop())
       const characters = await getCharacters(ids);
       setCharacters(characters)
     }
 
     getCharactersByEpisode();
-  }, [episode]);
+  }, [location]);
   return (
     <Grid container marginTop={8} justifyContent="center">
       <Grid item lg={7} xs={12} marginTop={3}>
         <Card sx={{ display: "flex", backgroundColor: "#477385ED" }}>
           <CardContent>
             <Typography variant="h2" color="#191C2B">
-              {episode?.name}
+              {location?.name}
             </Typography>
             <DataText
               bigSize
-              dataLabel="Air date:"
-              data={episode?.air_date}
+              dataLabel="Type:"
+              data={location?.type}
             />
             <DataText
               bigSize
-              dataLabel="Episode:"
-              data={episode?.episode}
+              dataLabel="Dimension:"
+              data={location?.dimension}
             />
           </CardContent>
         </Card>
       </Grid>
       <Grid item lg={12} xs={12} marginTop={3}>
-      <Typography variant='h4' color='white' noWrap>
-        Characters in this episode
-      </Typography>
+        <Typography variant='h4' color='white' noWrap>
+          Residents
+        </Typography>
         <Grid container gap={3} direction='row' justifyContent='center' marginTop={2}>
               {
                   characterPage.map((character) =>
@@ -78,4 +78,4 @@ const EpisodeDetails = () => {
   )
 }
 
-export default EpisodeDetails;
+export default LocationDetails;
