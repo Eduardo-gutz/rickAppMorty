@@ -6,6 +6,7 @@ import { getEpisodesById } from '../../services/episodes';
 import { getCharacters } from '../../services/characters';
 import CharacterCard from '../../components/characterCard/CharacterCard';
 import Paginator from '../../components/pagination/Paginator';
+import ButtonBack from '../../components/buttons/ButtonBack'
 
 const EpisodeDetails = () => {
   const [episode, setEpisode] = useState();
@@ -39,7 +40,9 @@ const EpisodeDetails = () => {
     getCharactersByEpisode();
   }, [episode]);
   return (
-    <Grid container marginTop={8} justifyContent="center">
+    <>
+    <ButtonBack />
+    <Grid container marginTop={1} justifyContent="center">
       <Grid item lg={7} xs={12} marginTop={3}>
         <Card sx={{ display: "flex", backgroundColor: "#477385ED" }}>
           <CardContent>
@@ -75,6 +78,7 @@ const EpisodeDetails = () => {
       </Grid>
       <Paginator changePage={(page) => setCurrentPage(page)} totalItems={characters.length} itemsPerPage={10} currentpage={currentPage}/>
     </Grid>
+    </>
   )
 }
 

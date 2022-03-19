@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
-import caractersSlice from './caracters/caractersSlice.js'
+import charactersSlice from './characters/charactersSlice.js'
+import episodesSlice from './episodes/episodesSlice'
 
 export default configureStore({
   reducer: {
-    caracters: caractersSlice
+    characters: charactersSlice,
+    episodes: episodesSlice
   }
 })

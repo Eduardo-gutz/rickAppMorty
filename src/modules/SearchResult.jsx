@@ -6,12 +6,14 @@ import EpisodeCard from '../components/episodeCard/EpisodeCard';
 import { getCharactersSearch } from '../services/characters';
 import { getEpisodesSearch } from '../services/episodes';
 import Paginator from '../components/pagination/Paginator'
+import ButtonBack from '../components/buttons/ButtonBack';
 
 const SearchResult = () => {
     const [charactersResult, setCharactersResult] = useState([])
     const [episodesResult, setEpisodesResult] = useState([])
     const [searchParams] = useSearchParams();
     const [currentPage, setCurrentPage] = useState(1);
+    const [currentPageEpisodes, setCurrentPageEpisodes] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
     const [nextPage, setNextPage] = useState(null);
 
@@ -22,10 +24,10 @@ const SearchResult = () => {
     }, [currentPage, charactersResult]);
     
     const episodesPage = useMemo(() => {
-        const firstElement = (currentPage - 1) * 10;
-        const lastElement = firstElement + 10;
+        const firstElement = (currentPageEpisodes - 1) * 2;
+        const lastElement = firstElement + 2;
         return episodesResult.slice(firstElement, lastElement);
-    }, [currentPage, episodesResult]);
+    }, [currentPageEpisodes, episodesResult]);
 
     const getParam = useCallback((param, name) => {
         const searchParam = searchParams.get(param)
@@ -80,7 +82,8 @@ const SearchResult = () => {
     }, [characterPage]);
     return(
         <>
-        <Typography variant='h4' color='white' noWrap sx={{ flexGrow: 1 }} marginTop={3}>
+        <ButtonBack />
+        <Typography variant='h4' color='white' noWrap sx={{ flexGrow: 1 }} marginTop={1}>
             Characters
         </Typography>
         <Grid container gap={3} direction='row' justifyContent='center' marginTop={2}>
@@ -105,6 +108,7 @@ const SearchResult = () => {
                 )
             }
         </Grid>
+        <Paginator changePage={(page) => setCurrentPageEpisodes(page)} totalItems={episodesResult.length} itemsPerPage={2} currentpage={currentPageEpisodes}/>
         </>
     )
 }

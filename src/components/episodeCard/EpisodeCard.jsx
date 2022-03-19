@@ -1,29 +1,40 @@
 import { CardContent, Box, Typography, CardMedia, Grid, Button } from '@mui/material'
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { addCharacters } from '../../redux/characters/charactersSlice';
 import { getCharacters } from '../../services/characters';
 import CardHover from '../customCard/Card';
-import DataText from '../DataText/DataText'
+import DataText from '../DataText/DataText';
+import useSearchCharactersByURL from '../../customHooks/useSearchCharacters';
 
 const EpisodeCard = ({ episode }) => {
+  const dispatch = useDispatch()
+  const [existent, notFoundIds] = useSearchCharactersByURL(episode.characters);
   const [characters, setCharacters] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const ids = episode.characters.slice(2, 8).map((character) => character.split('/').pop());
+    setCharacters(existent)
     const getCharactersByEpisode = async () => {
-      const characters = await getCharacters(ids);
-      setCharacters(characters)
+      const characters = await getCharacters(notFoundIds);
+      dispatch(addCharacters(characters))
+      if(characters.length) {
+        setCharacters((value) => [...value, ...characters])
+      } else {
+        setCharacters((value) => [...value, characters])
+      }
     }
-
-    getCharactersByEpisode()
-  }, [episode.characters]);
+    if(notFoundIds.length) {
+      getCharactersByEpisode()
+    }
+  }, [notFoundIds]);
   return (
     <CardHover sx={{ display: "flex", backgroundColor: '#477385ED' }} className='card'>
       <Grid container columns={{xs: 1, lg: 2, sm: 2, md: 2}}>
         <Grid item lg={1} md={1}>
           <Grid container columns={{xs: 3}}>
-            {characters.map(( character ) =>
+            {characters.slice(0, 6).map(( character ) =>
               <Grid key={character.id} item xs={1}>
                 <CardMedia
                   component="img"

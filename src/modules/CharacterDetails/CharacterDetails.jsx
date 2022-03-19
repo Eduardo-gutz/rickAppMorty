@@ -13,47 +13,63 @@ import DataTextLink from "./components/DataTextLink";
 import EpisodeCard from "../../components/episodeCard/EpisodeCard";
 import { getEpisodesById } from "../../services/episodes";
 import Paginator from "../../components/pagination/Paginator";
+import ButtonBack from "../../components/buttons/ButtonBack";
+import { useDispatch, useSelector } from "react-redux";
+import { addCharacters } from "../../redux/characters/charactersSlice";
+import useSearchEpisodeByURL from "../../customHooks/useSearchEpisode";
 
 const CharacterDetails = () => {
+  const dispatch = useDispatch();
+  const characters = useSelector((state) => state.characters.characters)
   const [searchParams] = useSearchParams();
   const [characterDetails, setCharacterDetails] = useState();
   const [episodes, setEpisodes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
+  const [existent, notFoundIds, setEpisodesToSearch] = useSearchEpisodeByURL();
 
   const episodesPage = useMemo(() => {
     const firstElement = (currentPage - 1) * 2;
     const lastElement = firstElement + 2;
     return episodes.slice(firstElement, lastElement);
-}, [currentPage, episodes]);
+  }, [currentPage, episodes]);
+
+  console.log(episodesPage);
 
   useEffect(() => {
     const getCharacter = async () => {
       const id = window.atob(searchParams.get("id"));
-      const character = await getCharacters(id);
+      let character = characters.find((char) => Number(char.id) === Number(id));
+      if(!character) {
+        character = await getCharacters(id);
+        dispatch(addCharacters([character]))
+      }
       setCharacterDetails(character);
+      setEpisodesToSearch(character.episode)
     };
 
     getCharacter();
   }, [searchParams]);
   
   useEffect(() => {
+    setEpisodes(existent)
     const getEpisodeByCharacters = async () => {
-      const ids = characterDetails.episode.map((ep) => ep.split('/').pop())
-      const episodes = await getEpisodesById(ids);
+      const episodes = await getEpisodesById(notFoundIds);
       if(episodes.length) {
-        setEpisodes(episodes);
+        setEpisodes((value) => [...value, ...episodes]);
       } else {
-        setEpisodes([episodes]);
+        setEpisodes((value) => [...value, episodes]);
       }
     };
 
-    console.log(characterDetails);
-
-    getEpisodeByCharacters();
-  }, [characterDetails]);
+    if(notFoundIds.length) {
+      getEpisodeByCharacters();
+    }
+  }, [notFoundIds]);
   return (
-    <Grid container marginTop={8} justifyContent="center">
+    <>
+    <ButtonBack />
+    <Grid container marginTop={1} justifyContent="center">
       <Grid item lg={5}>
         <CharacterImg
           image={characterDetails?.image}
@@ -113,6 +129,7 @@ const CharacterDetails = () => {
       </Grid>
       <Paginator changePage={(page) => setCurrentPage(page)} totalItems={episodes.length} itemsPerPage={2} currentpage={currentPage}/>
     </Grid>
+    </>
   );
 };
 

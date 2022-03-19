@@ -4,25 +4,39 @@ import { getPrincipalCharacters } from '../services/characters'
 import CharacterCard from '../components/characterCard/CharacterCard'
 import EpisodeCard from '../components/episodeCard/EpisodeCard'
 import { getEpisodes } from '../services/episodes'
+import { getCharacters } from '../services/characters'
+import { useDispatch, useSelector } from 'react-redux'
+import { addCharacters, setInfo } from '../redux/characters/charactersSlice'
+import { addEpisodes, setEpisodesInfo } from '../redux/episodes/episodesSlice';
 
 const Landing = () => {
-  const [characters, setCharacters] = useState([])
-  const [episodes, setEpisode] = useState([])
-
+  const dispatch = useDispatch();
+  const episodes = useSelector((state) => state.episodes.episodes);
+  const characters = useSelector((state) => state.characters.characters)
+  
   useEffect(() => {
-    const getChar = async () => {
-      const protagonists = await getPrincipalCharacters()
-      setCharacters(protagonists)
+    const getEpisode = async () => {
+      console.log('get Episodes');
+      const episodes = await getEpisodes()
+      dispatch(addEpisodes(episodes.results))
+      dispatch(setEpisodesInfo(episodes.info))
+    }
+
+    const getAllCharacters = async () => {
+      console.log('get Characters');
+      const characters = await getCharacters(``);
+      dispatch(addCharacters(characters.results));
+      dispatch(setInfo(characters.info));
     }
     
-    const getEpisode = async () => {
-      const episodes = await getEpisodes()
-      setEpisode(episodes.results)
+    if(!characters.length) {
+      getAllCharacters()
     }
+    if(!episodes.length) {
+      getEpisode()
+    }
+  }, []);
 
-    getChar()
-    getEpisode()
-  }, [])
   return (
     <>
       <Typography variant='h4' color='white' noWrap sx={{ flexGrow: 1 }} marginTop={3}>
@@ -30,7 +44,7 @@ const Landing = () => {
       </Typography>
       <Grid container gap={3} direction='row' justifyContent='center' marginTop={2}>
         {
-            characters.map((character) =>
+            characters.slice(0, 5).map((character) =>
                 <Grid key={character.id} item lg={2} sm={3} md={3} xs={10}>
                     <CharacterCard character={character} />
                 </Grid>
@@ -40,7 +54,7 @@ const Landing = () => {
       <Typography variant='h4' color='white' noWrap sx={{ flexGrow: 1 }} marginTop={4}>
         Episodes
       </Typography>
-      <Grid container gap={3} direction='row' justifyContent='center' marginTop={2}>
+      <Grid container gap={3} direction='row' justifyContent='center' marginTop={2} marginBottom={2}>
         {
             episodes.slice(0, 4).map((episode) =>
                 <Grid key={episode.id} item lg={5} sm={5} md={5} xs={10}>

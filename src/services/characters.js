@@ -12,6 +12,7 @@ export const getCharacters = async (ids) => {
 
   return response.data
 }
+
 export const getCharactersSearch = async (filters) => {
   const response = await axios.get(`https://rickandmortyapi.com/api/character/${filters}`)
 

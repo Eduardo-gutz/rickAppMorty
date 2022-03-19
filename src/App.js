@@ -3,6 +3,7 @@ import Navigation from './components/navigation/Navigation'
 import { Routes, Route } from 'react-router-dom'
 import { routes } from './routes/routes'
 import font from './assets/fonts/get_schwifty.ttf'
+import back from './assets/images/831780.png'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 const theme = createTheme({
@@ -67,6 +68,7 @@ function App () {
   return (
     <ThemeProvider theme={theme}>
       <div className='container'>
+        <img src={back} alt='' className='back' />
         <Navigation />
         <Container>
           <Routes>

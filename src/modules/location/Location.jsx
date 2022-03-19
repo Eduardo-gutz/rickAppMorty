@@ -6,6 +6,7 @@ import { getLocation } from '../../services/location';
 import { getCharacters } from '../../services/characters';
 import CharacterCard from '../../components/characterCard/CharacterCard';
 import Paginator from '../../components/pagination/Paginator';
+import ButtonBack from '../../components/buttons/ButtonBack';
 
 const LocationDetails = () => {
   const [location, setLocation] = useState();
@@ -31,15 +32,23 @@ const LocationDetails = () => {
   
   useEffect(() => {
     const getCharactersByEpisode = async () => {
-      const ids = location.residents.map((character) => character.split('/').pop())
-      const characters = await getCharacters(ids);
-      setCharacters(characters)
-    }
+      const ids = location?.residents.map((character) => character.split('/').pop())
+      if(ids?.length) {
+        const characters = await getCharacters(ids);
+        if(characters.length) {
+          setCharacters(characters)
+        } else {
+          setCharacters([characters])
+        }
+      }
 
+    }
     getCharactersByEpisode();
   }, [location]);
   return (
-    <Grid container marginTop={8} justifyContent="center">
+    <>
+    <ButtonBack />
+    <Grid container marginTop={1} justifyContent="center">
       <Grid item lg={7} xs={12} marginTop={3}>
         <Card sx={{ display: "flex", backgroundColor: "#477385ED" }}>
           <CardContent>
@@ -75,6 +84,7 @@ const LocationDetails = () => {
       </Grid>
       <Paginator changePage={(page) => setCurrentPage(page)} totalItems={characters.length} itemsPerPage={10} currentpage={currentPage}/>
     </Grid>
+    </>
   )
 }
 

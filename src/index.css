@@ -29,5 +29,9 @@ code {
 .container {
   height: 100vh;
   width: 100vw;
-  background: url('./assets/images/831780.png') center/cover no-repeat transparent;
+  object-fit: fill;
+}
+.back {
+  position: fixed;
+  z-index: -1;
 }
