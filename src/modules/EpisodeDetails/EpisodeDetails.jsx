@@ -6,13 +6,15 @@ import { getEpisodesById } from '../../services/episodes';
 import { getCharacters } from '../../services/characters';
 import CharacterCard from '../../components/characterCard/CharacterCard';
 import Paginator from '../../components/pagination/Paginator';
-import ButtonBack from '../../components/buttons/ButtonBack'
+import ButtonBack from '../../components/buttons/ButtonBack';
+import useSearchCharactersByURL from '../../customHooks/useSearchCharacters';
 
 const EpisodeDetails = () => {
   const [episode, setEpisode] = useState();
   const [searchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(1);
   const [characters, setCharacters] = useState([]);
+  const [existent, notFoundIds, setURLS] = useSearchCharactersByURL();
 
   const characterPage = useMemo(() => {
         const firstElement = (currentPage - 1) * 10;
@@ -24,6 +26,7 @@ const EpisodeDetails = () => {
     const getEpisode = async () => {
       const id = window.atob(searchParams.get('id'))
       const episode = await getEpisodesById(id);
+      setURLS(episode.characters)
       setEpisode(episode)
     }
 
@@ -31,14 +34,19 @@ const EpisodeDetails = () => {
   }, [searchParams]);
   
   useEffect(() => {
+    setCharacters(existent);
+
     const getCharactersByEpisode = async () => {
-      const ids = episode.characters.map((character) => character.split('/').pop())
-      const characters = await getCharacters(ids);
-      setCharacters(characters)
+      const characters = await getCharacters(notFoundIds);
+      if(characters.length) {
+        setCharacters((value) => [...value, ...characters])
+      } else {
+        setCharacters((value) => [...value, characters])
+      }
     }
 
-    getCharactersByEpisode();
-  }, [episode]);
+    if(notFoundIds.length) getCharactersByEpisode();
+  }, [notFoundIds]);
   return (
     <>
     <ButtonBack />

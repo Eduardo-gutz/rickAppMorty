@@ -7,12 +7,14 @@ import { getCharacters } from '../../services/characters';
 import CharacterCard from '../../components/characterCard/CharacterCard';
 import Paginator from '../../components/pagination/Paginator';
 import ButtonBack from '../../components/buttons/ButtonBack';
+import useSearchCharactersByURL from '../../customHooks/useSearchCharacters';
 
 const LocationDetails = () => {
   const [location, setLocation] = useState();
   const [searchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(1);
   const [characters, setCharacters] = useState([]);
+  const [existent, notFoundIds, setUrls] = useSearchCharactersByURL();
 
   const characterPage = useMemo(() => {
         const firstElement = (currentPage - 1) * 10;
@@ -24,6 +26,7 @@ const LocationDetails = () => {
     const getLocationById = async () => {
       const id = searchParams.get('id')
       const location = await getLocation(id);
+      setUrls(location?.residents)
       setLocation(location)
     }
 
@@ -31,20 +34,19 @@ const LocationDetails = () => {
   }, [searchParams]);
   
   useEffect(() => {
-    const getCharactersByEpisode = async () => {
-      const ids = location?.residents.map((character) => character.split('/').pop())
-      if(ids?.length) {
-        const characters = await getCharacters(ids);
-        if(characters.length) {
-          setCharacters(characters)
-        } else {
-          setCharacters([characters])
-        }
-      }
+    setCharacters(existent)
 
+    const getCharactersByLocation = async () => {
+      const characters = await getCharacters(notFoundIds);
+      if(characters.length) {
+        setCharacters((value) => [...value, ...characters])
+      } else {
+        setCharacters((value) => [...value, characters])
+      }
     }
-    getCharactersByEpisode();
-  }, [location]);
+
+    if(notFoundIds.length) getCharactersByLocation();
+  }, [notFoundIds]);
   return (
     <>
     <ButtonBack />

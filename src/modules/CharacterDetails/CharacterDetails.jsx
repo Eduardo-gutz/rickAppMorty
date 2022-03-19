@@ -34,8 +34,6 @@ const CharacterDetails = () => {
     return episodes.slice(firstElement, lastElement);
   }, [currentPage, episodes]);
 
-  console.log(episodesPage);
-
   useEffect(() => {
     const getCharacter = async () => {
       const id = window.atob(searchParams.get("id"));
@@ -101,12 +99,14 @@ const CharacterDetails = () => {
             <DataTextLink
               label={'Origin:'}
               data={characterDetails?.origin.name}
+              showButton={characterDetails?.origin.url !== ''}
               buttonText='View Location'
               onClick={() => navigate(`/location?id=${characterDetails?.origin.url.split('/').pop()}`)}
             />
             <DataTextLink
               label={'Location:'}
               data={characterDetails?.location.name}
+              showButton={characterDetails?.location.url !== ''}
               buttonText='View Location'
               onClick={() => navigate(`/location?id=${characterDetails?.location.url.split('/').pop()}`)}
             />

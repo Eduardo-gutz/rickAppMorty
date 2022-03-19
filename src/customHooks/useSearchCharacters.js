@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-const useSearchCharactersByURL = (characters) => {
+const useSearchCharactersByURL = (characters = []) => {
     const charactersSaved = useSelector((state) => state.characters.characters);
     const [existent, setExistent] = useState([]);
     const [notFundIds, setIds] = useState([]);
+    const [charactersToSearch, setCharacters] = useState(characters)
 
     useEffect(() => {
-        const ids = characters.map((character) => character.split('/').pop());
+        const ids = charactersToSearch.map((character) => character.split('/').pop());
         
         const existentChrt = charactersSaved.filter((char) => {
             const existent = ids.some((id, i) => {
@@ -26,9 +27,9 @@ const useSearchCharactersByURL = (characters) => {
 
         setExistent(existentChrt);
         setIds(ids);
-    }, [characters]);
+    }, [charactersToSearch]);
 
-    return [existent, notFundIds]
+    return [existent, notFundIds, setCharacters]
 };
 
 export default useSearchCharactersByURL;

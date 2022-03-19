@@ -1,6 +1,5 @@
 import { Grid, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
-import { getPrincipalCharacters } from '../services/characters'
+import { useEffect } from 'react'
 import CharacterCard from '../components/characterCard/CharacterCard'
 import EpisodeCard from '../components/episodeCard/EpisodeCard'
 import { getEpisodes } from '../services/episodes'
