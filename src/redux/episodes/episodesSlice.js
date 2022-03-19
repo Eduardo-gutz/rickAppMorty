@@ -13,13 +13,13 @@ export const episodesSlice = createSlice({
   },
   reducers: {
     setEpisodesInfo: (state, action) => {
-      state.info = {...state.info, ...action.payload}
+      state.info = { ...state.info, ...action.payload }
     },
     setEpisodes: (state, action) => {
-      state.episodes = action.payload;
+      state.episodes = action.payload
     },
     addEpisodes: (state, action) => {
-      state.episodes.push(...action.payload);
+      state.episodes.push(...action.payload)
     }
   }
 })

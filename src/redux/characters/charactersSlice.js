@@ -13,13 +13,13 @@ export const charactersSlice = createSlice({
   },
   reducers: {
     setInfo: (state, action) => {
-      state.info = {...state.info, ...action.payload}
+      state.info = { ...state.info, ...action.payload }
     },
     setCharacters: (state, action) => {
-      state.characters = action.payload;
+      state.characters = action.payload
     },
     addCharacters: (state, action) => {
-      state.characters.push(...action.payload);
+      state.characters.push(...action.payload)
       state.characters.sort((charA, charB) => charA.id > charB.id ? 1 : -1)
     }
   }
