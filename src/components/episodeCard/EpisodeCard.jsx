@@ -38,6 +38,7 @@ const EpisodeCard = ({ episode }) => {
     if (notFoundIds.length) {
       getCharactersByEpisode()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notFoundIds])
   return (
     <CardHover sx={{ display: 'flex', backgroundColor: '#477385ED' }} className='card'>

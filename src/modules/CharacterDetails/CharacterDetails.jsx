@@ -58,7 +58,8 @@ const CharacterDetails = () => {
     }
 
     getCharacter()
-  }, [searchParams])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, searchParams])
 
   useEffect(() => {
     // Add the Episodes Array the existing episodes in Redux
@@ -77,6 +78,7 @@ const CharacterDetails = () => {
     if (notFoundIds.length) {
       getEpisodeByCharacters()
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notFoundIds])
   return (
     <>

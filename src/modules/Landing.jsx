@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Grid, Typography } from '@mui/material'
 import { useEffect, useState, useMemo } from 'react'
 import CharacterCard from '../components/characterCard/CharacterCard'

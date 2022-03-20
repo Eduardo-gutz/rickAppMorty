@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useMemo } from 'react'
 import { Grid, Card, CardContent, Typography } from '@mui/material'
 import DataText from '../../components/DataText/DataText'

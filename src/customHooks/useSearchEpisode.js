@@ -44,7 +44,7 @@ const useSearchEpisodeByURL = (episodes = []) => {
 
     setExistent(existentChrt)
     setIds(ids)
-  }, [episodesToSearch])
+  }, [episodesSaved, episodesToSearch])
 
   return [existent, notFundIds, updateEpisodes]
 }

@@ -23,7 +23,7 @@ const Filters = ({ activeMenu, setFilters }) => {
 
     const filterSeasson = `&e=${window.btoa('S' + seasson + 'E' + episode)}`
     setFilters(`${filterChar}${filterGen}${seasson !== '' && episode !== '' ? filterSeasson : ''}`)
-  }, [seassonSelected, episodeSelected, filtersCharacter, filtersGender])
+  }, [seassonSelected, episodeSelected, filtersCharacter, filtersGender, setFilters])
 
   const generateSeassonsArray = (limit) => {
     const array = new Array(limit + 1).fill(1, 0)

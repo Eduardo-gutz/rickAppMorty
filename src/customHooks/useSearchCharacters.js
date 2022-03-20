@@ -36,7 +36,7 @@ const useSearchCharactersByURL = (characters = []) => {
 
     setExistent(existentChrt)
     setIds(ids)
-  }, [charactersToSearch])
+  }, [charactersSaved, charactersToSearch])
 
   return [existent, notFundIds, setCharacters]
 }
